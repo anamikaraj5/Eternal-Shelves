@@ -1,0 +1,32 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodbb
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_volume:/data/db
+  api:
+    image: api
+    container_name: apii
+    depends_on:
+      - mongodb
+    build: 
+      context: server
+      dockerfile: ./dockerfile
+    ports:
+      - 7000:7000
+
+  ui:
+    image: ui
+    container_name: uii
+    depends_on:
+      - api
+    build:
+      context: ui
+      dockerfile: ./dockerfile
+    ports:
+      - 3004:3004
+
+volumes:
+  mongo_volume:
